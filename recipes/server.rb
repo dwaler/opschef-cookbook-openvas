@@ -45,7 +45,7 @@ case node['platform']
       not_if "rpm -qa |grep alien"
     end
 
-    %w{ openvas-libraries openvas-manager xerces xalan ovaldi openvas-scanner openvas-cli openvas-glib2 greenbone-security-assistant openvas
+    %w{ openvas-libraries openvas-manager xerces-c xalan ovaldi openvas-scanner openvas-cli openvas-glib2 greenbone-security-assistant openvas
         openvas-administrator }.each do |pkg|
     package pkg
     end
