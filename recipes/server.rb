@@ -45,24 +45,11 @@ case node['platform']
       not_if "rpm -qa |grep alien"
     end
 
-    # Implement workaround for OpenVAS v5 bug
-      execute "install-openvas-v4-x86_64" do
-        command "rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/openvas-libraries-4.0.2-1.el5.art.x86_64.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/openvas-manager-2.0.4-3.el5.art.x86_64.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/xerces-c-2.8.0-4.el5.art.x86_64.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/xalan-c-1.10.0-6.el5.art.x86_64.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/ovaldi-5.6.4-1.el5.art.x86_64.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/openvas-scanner-3.2.2-3.el5.art.x86_64.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/openvas-cli-1.1.3-1.el5.art.x86_64.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/openvas-glib2-2.22.5-1.el5.art.x86_64.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/greenbone-security-assistant-2.0.1-4.el5.art.x86_64.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/openvas-1.0-0.5.el5.art.noarch.rpm;
-                 rpm -Uvh http://www6.atomicorp.com/channels/atomic/centos/5/x86_64/RPMS/openvas-administrator-1.1.1-2.el5.art.x86_64.rpm;"
-        action :run
-        only_if "uname -a |grep x86_64"
-        not_if "rpm -qa |grep openvas"
-      end
-    
+    %w{ openvas-libraries openvas-manager xerces xalan ovaldi openvas-scanner openvas-cli openvas-glib2 greenbone-security-assistant openvas
+        openvas-administrator }.each do |pkg|
+    package pkg
+    end
+
       # Implement workaround for package libmicrohttpd not being compiled
       # with SSL support on Redhat.
       script "start-gsad-service" do
